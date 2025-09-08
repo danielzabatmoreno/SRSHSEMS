@@ -1,4 +1,5 @@
 FROM php:8.2-fpm
+RUN docker-php-ext-install pdo_pgsql pgsql
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -31,6 +32,8 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
+RUN php artisan session:table
+RUN php artisan migrate --force
 RUN npm install && npm run build
 
 RUN chown -R www-data:www-data storage bootstrap/cache
