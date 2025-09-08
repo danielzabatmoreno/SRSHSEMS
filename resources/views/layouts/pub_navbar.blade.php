@@ -4,12 +4,11 @@
     </button>
     <div class="navbar-collapse navbar">
         <ul class="navbar-nav">
-            
-                <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                    <img src="{{ asset('images/logos/logos.png') }}" class="avatar img-fluid rounded" alt="">
-                </a>
-            
+            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                <img src="{{ asset('images/logos/logos.png') }}" 
+                     class="logo-full" 
+                     alt="Logo">
+            </a>
         </ul>
     </div>
 </nav>
-
