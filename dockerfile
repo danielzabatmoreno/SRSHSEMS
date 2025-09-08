@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
-RUN docker-php-ext-install pdo_pgsql pgsql
 
+# Install PostgreSQL driver + system deps
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -26,17 +26,24 @@ RUN apt-get update && apt-get install -y \
         pgsql \
         zip
 
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www/html
 COPY . .
 
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
-RUN php artisan session:table
-RUN php artisan migrate --force
+
+# Build frontend
 RUN npm install && npm run build
 
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+# Expose app port
 EXPOSE 8080
-CMD php artisan serve --host=0.0.0.0 --port=8080
+
+# Run migrations + seed at runtime (not at build)
+CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8080
