@@ -16,11 +16,28 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\OldStudentController;
+use App\Http\Controllers\StudentController;
 
 
 Route::get('/', function () {
     return view('welcome'); // uses layouts/guest.blade.php
 })->name('welcome');
+
+Route::middleware(['auth', 'role:Student'])->group(function () {
+    Route::get('/student/dashboard', [DashboardController::class, 'studentDashboard'])
+        ->name('student.dashboard');
+});
+Route::get('/student/dashboard', [StudentController::class, 'studentDashboard'])
+    ->name('student.dashboard')
+    ->middleware('auth'); 
+
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/student/dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
+    Route::get('/student/subjects', [StudentController::class, 'subjects'])->name('student.subjects');
+    Route::get('/student/schedule', [StudentController::class, 'schedule'])->name('student.schedule');
+});
+
 
 Route::get('send-mail', [MailController::class, 'index']);
 Route::get('send-registration-mail/{id}', [MailController::class, 'sendRegistrationEmail']);
@@ -60,7 +77,6 @@ Route::post('/old-student-register', [OldStudentController::class, 'registerStud
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('students', StudentsController::class);
-    Route::resource('rooms', RoomController::class);
 
 });
 

@@ -74,19 +74,24 @@
                         <h3 class="fw-bold">Academic Head Dashboard</h3>
                     </div>
 
-                    <!-- Summary Totals -->
-                    <div class="row mb-4">
+                    <!-- ✅ Summary Totals -->
+                    <div class="row">
                         <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm border-0 text-center">
+                            <div class="card shadow-sm border-0 text-center h-100"
+                                style="cursor:pointer"
+                                onclick="window.location='{{ route('students.index') }}'">
                                 <div class="card-body">
-                                    <i class="fa-solid fa-users fa-2x text-primary mb-2"></i>
-                                    <h6 class="fw-bold">Total Students</h6>
+                                    <i class="fa-solid fa-user-check fa-2x text-primary mb-2"></i>
+                                    <h6 class="fw-bold">Total Students Enrolled</h6>
                                     <span class="h4 text-dark">{{ $totalStudents }}</span>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm border-0 text-center">
+                            <div class="card shadow-sm border-0 text-center h-100"
+                                style="cursor:pointer"
+                                onclick="window.location='{{ route('teachers.index') }}'">
                                 <div class="card-body">
                                     <i class="fa-solid fa-chalkboard-teacher fa-2x text-success mb-2"></i>
                                     <h6 class="fw-bold">Total Teachers</h6>
@@ -94,17 +99,23 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm border-0 text-center">
+                            <div class="card shadow-sm border-0 text-center h-100"
+                                style="cursor:pointer"
+                                onclick="window.location='{{ route('students_registration.index') }}'">
                                 <div class="card-body">
                                     <i class="fa-solid fa-user-check fa-2x text-info mb-2"></i>
-                                    <h6 class="fw-bold">Total Students Enrolled</h6>
-                                    <span class="h4 text-dark">{{ $totalEnrolled }}</span>
+                                    <h6 class="fw-bold">Total Students Request</h6>
+                                    <span class="h4 text-dark">{{ $totalRequest }}</span>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm border-0 text-center">
+                            <div class="card shadow-sm border-0 text-center h-100"
+                                style="cursor:pointer"
+                                onclick="window.location='{{ route('sections.index') }}'">
                                 <div class="card-body">
                                     <i class="fa-solid fa-layer-group fa-2x text-danger mb-2"></i>
                                     <h6 class="fw-bold">Total Sections</h6>
@@ -114,7 +125,7 @@
                         </div>
                     </div>
 
-                    <!-- Cards for Strands -->
+                    <!-- ✅ Cards for Strands -->
                     <div class="row justify-content-around">
                         <!-- STEM -->
                         <div class="col-md-4 mb-4">
@@ -165,12 +176,12 @@
                         </div>
                     </div>
 
-                    <!-- Charts Section -->
+                    <!-- ✅ Charts Section -->
                     <div class="row mt-4">
                         <!-- Strand Chart -->
                         <div class="col-md-4 mb-4">
                             <div class="card shadow-sm border-0 h-100">
-                                <div class="card-header bg-primary text-white fw-bold">Enrollment per Strand</div>
+                                <div class="card-header bg-primary text-white fw-bold">Enrollment per Strands</div>
                                 <div class="card-body chart-container">
                                     <canvas id="barChart"></canvas>
                                 </div>
@@ -180,7 +191,7 @@
                         <!-- Enrollment Status -->
                         <div class="col-md-4 mb-4">
                             <div class="card shadow-sm border-0 h-100">
-                                <div class="card-header bg-warning text-dark fw-bold">Enrollment Status</div>
+                                <div class="card-header bg-warning text-dark fw-bold">Enrollment Request Status</div>
                                 <div class="card-body chart-container">
                                     <canvas id="statusChart"></canvas>
                                 </div>
@@ -198,8 +209,8 @@
                         </div>
                     </div>
 
-                    <!-- Table Section -->
-                    <div class="card border-0 shadow-sm mt-4">
+                    <!-- ✅ Table Section -->
+                    <div class="card border-0 shadow-sm mt-4 mb-5">
                         <div class="card-header bg-white">
                             <h5 class="card-title fw-bold">Senior High School Enrollment System</h5>
                             <h6 class="card-subtitle text-muted">
@@ -273,6 +284,7 @@
             data: {
                 labels: ['Pending', 'Approved', 'Rejected'],
                 datasets: [{
+                    label: 'Students',
                     data: [pendingCount, approvedCount, rejectedCount],
                     backgroundColor: ['#f1c40f', '#2ecc71', '#e74c3c']
                 }]
@@ -289,6 +301,7 @@
             data: {
                 labels: ['Boys', 'Girls'],
                 datasets: [{
+                    label: 'Students',
                     data: [totalBoys, totalGirls],
                     backgroundColor: ['#3498db', '#e74c3c']
                 }]

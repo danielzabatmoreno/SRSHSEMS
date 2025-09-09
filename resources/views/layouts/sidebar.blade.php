@@ -19,13 +19,13 @@
                 <li class="sidebar-item">
                     <a href="{{ route('students_registration.index') }}" class="sidebar-link {{ request()->routeIs('students_registration.index') ? 'active' : '' }}">
                         <i class="fa-solid fa-users pe-2"></i>  
-                        Student Enrollees 
+                        Enrollment Requests
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="{{ route('students.index') }}" class="sidebar-link {{ request()->routeIs('students.index') ? 'active' : '' }}">
                         <i class="fa-solid fa-users pe-2"></i> 
-                        Students
+                        Enrolled Students
                     </a>
                 </li>
                 <li class="sidebar-item">

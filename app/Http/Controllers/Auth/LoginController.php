@@ -10,6 +10,10 @@ class LoginController extends Controller
 {
     protected function authenticated($user)
     {
+
+        if ($user->role === 'Student') {
+            return redirect()->route('student.dashboard');
+        }
         if ($user->role === 'Cashier') {
             return redirect()->route('students_payment.Payment_list');
         }

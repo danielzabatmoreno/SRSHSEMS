@@ -19,5 +19,5 @@ function prevSlide() {
 // Initial display
 showSlide(currentIndex);
 
-// Auto slide every 3 seconds (3000 ms)
-setInterval(nextSlide, 3000);  // You can adjust the interval as needed
+// Auto slide every 2 seconds (3000 ms)
+setInterval(nextSlide, 2000);  // You can adjust the interval as needed

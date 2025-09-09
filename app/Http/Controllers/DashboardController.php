@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $totalTeachers = Teacher::count();
         $totalSection  = Section::count();   // ✅ singular fixed
         $totalSubjects = Subject::count();
-        $totalEnrolled = Students::count();
+        $totalRequest = StudentRegistration::count();
         $totalStrands  = Strand::count();
         $totalBoys     = Students::where('Gender', 'Male')->count();
         $totalGirls    = Students::where('Gender', 'Female')->count();
@@ -48,7 +48,7 @@ class DashboardController extends Controller
             'totalTeachers',
             'totalSection',
             'totalSubjects',
-            'totalEnrolled',
+            'totalRequest',
             'totalStrands',
             'totalBoys',
             'totalGirls',
