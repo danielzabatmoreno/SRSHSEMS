@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             SubjectSeeder::class,
             ScheduleSeeder::class,
             employee_seeder::class,
-            CashierSeeder::class
+            AdminSeeder::class,
         ]);
     }
 }

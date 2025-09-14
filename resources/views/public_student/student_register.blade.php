@@ -8,9 +8,9 @@
     <title>Student Enrollment Form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @vite(['public/css/style.css'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="icon" href="{{ asset('images/logos/logo.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('images/logos/logos.png') }}" type="image/png">
 </head>
 
 <body>
@@ -96,18 +96,21 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <label class="form-label">Form 138</label>
-                                    <input type="file" class="form-control" name="Form138">
+                                <div class="col-md-6">
+                                    <label class="form-label">Upload Form 138</label>
+                                    <input type="file" name="Form138" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Upload PSA Birth Certificate</label>
+                                    <input type="file" name="PSAFile" class="form-control">
                                 </div>
 
                                 <div class="col-md-4">
                                     <label class="form-label">Strand</label>
                                     <select name="Strand" class="form-control" required>
-                                        <option value="">Select Strand</option>
-                                        <option value="STEM">STEM</option>
-                                        <option value="ABM">ABM</option>
-                                        <option value="HUMSS">HUMSS</option>
+                                        <option value="">Select Cluster</option>
+                                        <option value="ACADEMIC CLUSTERS">ACADEMIC CLUSTERS</option>
+                                        <option value="TECHPRO CLUSTERS">TECHPRO CLUSTERS</option>
                                     </select>
                                 </div>
 
@@ -178,12 +181,16 @@
     <!-- Bootstrap Modal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if success message exists
-            @if(session('success'))
-                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                successModal.show();
-            @endif
-        });
+        @if(session('success'))
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+            // After 30 seconds redirect to login
+            setTimeout(function() {
+                window.location.href = "{{ route('login') }}";
+            }, 10000); 
+        @endif
+    });
     </script>
 </body>
 

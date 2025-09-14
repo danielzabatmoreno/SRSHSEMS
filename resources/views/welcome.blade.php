@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ asset('styles/landingPage.css') }}">
+  @vite(['public/styles/landingPage.css'])
   <link rel="icon" href="{{ asset('images/logos/logos.png') }}" type="image/png">
   <title>Landing Page</title>
 
@@ -23,7 +23,6 @@
 
     <div class="navbar-links" id="navbarMenu">
       @if (Auth::check())
-      <a href="{{ route('dashboard') }}">Dashboard</a>
       <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;"> @csrf </form>
       @else
@@ -51,7 +50,7 @@
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-logo-section">
-        <a href="/"><img src="{{ asset('images/logos/logo.png') }}" alt="Srshs Logo" class="footer-logo-img"></a>
+        <a href="/"><img src="{{ asset('images/logos/logos.png') }}" alt="Srshs Logo" class="footer-logo-img"></a>
         <div class="footer-text">
           <a href="/">
             <h3>SANTA-ROSA SENIOR HIGH SCHOOL</h3>

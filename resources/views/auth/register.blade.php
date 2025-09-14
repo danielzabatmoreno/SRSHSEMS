@@ -9,7 +9,14 @@
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 via-green-600 to-green-700">
     
     <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
-        
+
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="mb-4 px-4 py-3 rounded-lg bg-green-100 border border-green-400 text-green-700">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Logo -->
         <div class="flex justify-center mb-6">
             <img src="{{ asset('images/Um Logo.png') }}" alt="Logo" class="w-20 h-20 rounded-full shadow-md">
@@ -68,10 +75,11 @@
                 <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
                 <select id="role" name="role" required
                         class="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    <option value="">-- Select Role --</option>
+                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
                     <option value="Registrar" {{ old('role') == 'Registrar' ? 'selected' : '' }}>Registrar</option>
-                    <option value="Operator" {{ old('role') == 'Operator' ? 'selected' : '' }}>Operator</option>
-                    <option value="Cashier" {{ old('role') == 'Cashier' ? 'selected' : '' }}>Cashier</option>
+                    <option value="Academic Head" {{ old('role') == 'Academic Head' ? 'selected' : '' }}>Academic Head</option>
+                    <option value="Teacher" {{ old('role') == 'Teacher' ? 'selected' : '' }}>Teacher</option>
+                    <option value="Students" {{ old('role') == 'Students' ? 'selected' : '' }}>Students</option>
                 </select>
                 @error('role')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>

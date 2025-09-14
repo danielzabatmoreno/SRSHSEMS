@@ -69,7 +69,7 @@
                                     <thead>
                                         <tr>
                                             <th>Subject ID</th>
-                                            <th>Strand</th>
+                                            <th>Clusters</th>
                                             <th>Subject</th>
                                             <th>Description</th>
                                             <th>Semester</th>

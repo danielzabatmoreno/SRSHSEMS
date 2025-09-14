@@ -47,46 +47,63 @@ class PublicStudentRegistrationController extends Controller
             'Address' => 'required|string',
             'ContactNo' => 'required|string|max:15',
             'Email' => 'required|string|email|max:100|unique:student_registration',
-            'Strand' => 'required|string|in:STEM,ABM,HUMSS',
+            'Strand' => 'required|string|in:TECHPRO CLUSTERS,ACADEMIC CLUSTERS',
             'GradeLevel' => 'required|string|in:Grade 11,Grade 12',
             'FatherFullName' => 'required|string|max:100',
             'MotherFullName' => 'required|string|max:100',
             'FatherContactNo' => 'required|string|max:15',
             'MotherContactNo' => 'required|string|max:15',
             'Form138' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'PSA' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
-                    // 2️⃣ Handle Form138 file upload if exists
-            if ($request->hasFile('Form138')) {
-                $filePath = $request->file('Form138')->store('form138', 'public');
-                $data['Form138'] = $filePath;
-            } else {
-                $data['Form138'] = null; // explicitly null if not uploaded
-            }
-        
+         // ✅ Handle Form138
+        if ($request->hasFile('Form138')) {
+            $file = $request->file('Form138');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $filePath = $file->storeAs('form138', $fileName, 'public');
+            $data['Form138'] = $filePath;
+        } else {
+            $data['Form138'] = null;
+        }
 
+        // ✅ Handle PSA
+        if ($request->hasFile('PSA')) {
+            $file = $request->file('PSA');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $filePath = $file->storeAs('psa', $fileName, 'public');
+            $data['PSA'] = $filePath;
+        } else {
+            $data['PSA'] = null;
+        }
+
+        // ✅ System fields
         $data['application_date'] = now();
         $data['current_status'] = 'Pending';
+        $data['Status'] = 'Pending';
 
-                // ✅ Save student
+        // ✅ Save
         $student = StudentRegistration::create($data);
 
-        // ✅ Prepare missing/validation info
+        // ✅ Missing data check
         $missing = [];
         if (!$student->Form138) $missing[] = 'Form 138 not uploaded';
+        if (!$student->PSA) $missing[] = 'PSA not uploaded';
         if (!$student->GradeLevel) $missing[] = 'Grade Level missing';
         if (!$student->Strand) $missing[] = 'Strand missing';
         if (!$student->FatherContactNo) $missing[] = 'Father Contact No missing';
         if (!$student->MotherContactNo) $missing[] = 'Mother Contact No missing';
 
-        // ✅ Send email with student data and missing info
-        Mail::to($student->Email)->send(new EnrollmentConfirmation($student, $missing));
-
+        // ✅ Send email safely
+        try {
+            Mail::to($student->Email)->send(new EnrollmentConfirmation($student, $missing));
+        } catch (\Exception $mailError) {
+            \Log::error('Mail send failed: ' . $mailError->getMessage());
+        }
 
         return back()->with('success', 'Registration submitted successfully!');
     } catch (\Exception $e) {
         return back()->withInput()->withErrors(['error' => $e->getMessage()]);
     }
 }
-
 }

@@ -2,14 +2,13 @@
 
 namespace App\Mail;
 
-use App\Models\StudentRegistration; 
+use App\Models\StudentRegistration;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Address;
 
 class TestMail extends Mailable
 {
@@ -17,12 +16,15 @@ class TestMail extends Mailable
 
     public $registration;
 
+    public $password;
+
     /**
      * Create a new message instance.
      */
-    public function __construct(StudentRegistration $registration)  
+    public function __construct(StudentRegistration $registration, $password = null)
     {
         $this->registration = $registration;
+        $this->password = $password;
     }
 
     /**
@@ -40,16 +42,18 @@ class TestMail extends Mailable
      * Get the message content definition.
      */
     public function content(): Content
-{
-    return new Content(
-        view: 'approved-mail',
-        with: [
-            'studentName' => $this->registration->FirstName,
-            'registration' => $this->registration,
-            'missing' => $this->registration->missing ?? []  // always an array
-        ]
-    );
-}
+    {
+        return new Content(
+            view: 'approved-mail',
+            with: [
+                'studentName' => $this->registration->FirstName,
+                'registration' => $this->registration,
+                'password' => $this->password,
+                'missing' => $this->registration->missing ?? [],  // always an array
+            ]
+        );
+    }
+
     /**
      * Get the attachments for the message.
      *

@@ -52,11 +52,39 @@
                                                 <button class="btn btn-outline-success" type="submit">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
-                                            </div>
-                                            
-                                            <a href="{{ route('students_registration.create') }}" class="btn btn-info">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </a>
+                                            </div>                          
+                                                <div class="d-flex gap-2">
+                                                    {{-- Add New --}}
+                                                    <a href="{{ route('students_registration.create') }}" class="btn btn-info">
+                                                        <i class="fa-solid fa-plus"></i> 
+                                                    </a>
+
+                                                    {{-- Export Dropdown --}}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-success dropdown-toggle" 
+                                                                data-bs-toggle="dropdown" aria-expanded="false" 
+                                                                style="background-color:#28a745; border-color:#28a745;">
+                                                            <i class="fa-solid fa-download"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="dropdown-item" href="{{ route('students_registration.export.excel') }}">
+                                                                    <i class="fa-solid fa-file-excel text-success"></i> Excel
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" href="{{ route('students_registration.export.pdf') }}">
+                                                                    <i class="fa-solid fa-file-pdf text-danger"></i> PDF
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" href="{{ route('students_registration.export.doc') }}">
+                                                                    <i class="fa-solid fa-file-word text-primary"></i> Word
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                         </form>
                                     </div>
                                 </nav>

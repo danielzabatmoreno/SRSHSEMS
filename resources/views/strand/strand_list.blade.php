@@ -26,26 +26,27 @@
             <main class="content px-3 py-2">
                 <div class="container-fluid">
                     <div class="mb-3">
-                        <h4>Strand List</h4>
+                        <h4>New SHS Curriculum</h4>
                     </div>
                     <div class="row">
                     </div>       
                     <!-- Table Element -->
                     <div class="card border-0">
                         <div class="card-header">
+                            <h5 class="card-title">Electives List</h5>
                             <nav class="navbar bg-body-light">
                                 <div class="container-fluid">
                                     <form class="d-flex justify-content-between align-items-center w-100" role="search" method="GET" action="{{ route('strand.index') }}">
                     <div class="d-flex">
                         <input class="form-control me-2" type="search" name="search" 
-                             placeholder="Search by Strand Name" aria-label="Search" 
+                             placeholder="Search by Clusters Name" aria-label="Search" 
                              value="{{ request('search') }}">
                         <button class="btn btn-outline-success" type="submit">
                              <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                      </div>
                         <a href="{{ route('strand.create') }}" class="btn btn-info">
-                             <i class="fa-solid fa-plus"></i>Add Strand
+                             <i class="fa-solid fa-plus"></i>Add Clusters
                         </a>
                             </form>
                                 </div>
@@ -68,8 +69,8 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Strand ID</th>
-                                            <th>Strand Name</th>
+                                            <th>Cluster ID</th>
+                                            <th>Clusters Name</th>
                                             <th>Description</th>
                                             <th>Actions</th>
                                         </tr>
@@ -102,7 +103,7 @@
                                                            aria-live="assertive" 
                                                            aria-atomic="true">
                                                           <div class="toast-body">
-                                                              Are you sure you want to delete this Strand?
+                                                              Are you sure you want to delete this Clusters?
                                                               <div class="mt-2 pt-2 border-top">
                                                                   <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                                   <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Cancel</button>

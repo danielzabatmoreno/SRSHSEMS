@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class StudentRegistration extends Model
 {
     use HasFactory;
+
     protected $table = 'student_registration';
+
     protected $primaryKey = 'RegistrationID';
 
     protected $fillable = [
@@ -30,25 +32,25 @@ class StudentRegistration extends Model
         'application_date',
         'approved_date',
         'rejected_date',
-        'current_status'
+        'current_status',
     ];
 
     protected $dates = [
         'application_date',
         'approved_date',
-        'rejected_date'
+        'rejected_date',
     ];
 
     public static function validateFields($data)
     {
         foreach (self::$fillable as $field) {
             if (empty($data[$field])) {
-                return "Please fill up all fields";
+                return 'Please fill up all fields';
             }
         }
+
         return null;
     }
-
 
     public $timestamps = false;
 
@@ -56,5 +58,4 @@ class StudentRegistration extends Model
     {
         return $this->belongsTo(StudentRegistration::class, 'RegistrationID');
     }
-    
 }

@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StudentRegistration;
-use Illuminate\Http\Request;
 use App\Mail\TestMail;
-use Illuminate\Support\Facades\Mail;
+use App\Models\StudentRegistration;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
+// add exports
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RegistrationsExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
 
 class RegistrationController extends Controller
 {
-    public function __construct() {
-        if (!Auth::check()) {
+    public function __construct()
+    {
+        if (! Auth::check()) {
             redirect('/login')->send();
         }
     }
@@ -58,7 +69,8 @@ class RegistrationController extends Controller
                 'MotherFullName' => 'required|string|max:100',
                 'FatherContactNo' => 'required|string|max:15',
                 'MotherContactNo' => 'required|string|max:15',
-                'Form138' => 'required|file|max:10240', // any file type, max 10MB
+                'Form138' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+                'PSA' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
             ]);
 
             if ($request->hasFile('Form138')) {
@@ -73,15 +85,16 @@ class RegistrationController extends Controller
             StudentRegistration::create($data);
 
             return redirect()->route('students_registration.index')
-                             ->with('success', 'Registration successful!');
+                ->with('success', 'Registration successful!');
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['error' => 'Registration failed. ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['error' => 'Registration failed. '.$e->getMessage()]);
         }
     }
 
     public function edit($id)
     {
         $registration = StudentRegistration::findOrFail($id);
+
         return view('students_registration.edit', compact('registration'));
     }
 
@@ -99,33 +112,52 @@ class RegistrationController extends Controller
                         $data['approved_date'] = now();
                         $data['rejected_date'] = null;
 
+                        $plainPassword = Str::random(8);
+                        $hashedPassword = Hash::make($plainPassword);
+
                         try {
-                            Mail::to($registration->Email)->send(new \App\Mail\TestMail($registration));
+                            User::create([
+                                'name' => $registration->FirstName.' '.$registration->LastName,
+                                'email' => $registration->Email,
+                                'password' => $hashedPassword,
+                                'role' => 'Student',
+                            ]);
+
+                            Mail::to($registration->Email)->send(new TestMail($registration, $plainPassword));
                         } catch (\Exception $e) {
                             return back()->withInput()
-                                         ->withErrors(['error' => 'Email sending failed. ' . $e->getMessage()]);
+                                ->withErrors(['error' => 'Email sending failed. '.$e->getMessage()]);
                         }
                         break;
 
                     case 'Rejected':
                         $data['rejected_date'] = now();
                         $data['approved_date'] = null;
+
+                        User::where('email', $registration->Email)
+                            ->where('role', 'Student')
+                            ->delete();
                         break;
 
-                    default:
+                    default: // Pending
                         $data['approved_date'] = null;
                         $data['rejected_date'] = null;
+
+                        User::where('email', $registration->Email)
+                            ->where('role', 'Student')
+                            ->delete();
                         break;
                 }
 
                 $registration->update($data);
 
                 $statusMessage = $request->current_status == 'Approved' ? 'approved' : 'rejected';
+
                 return redirect()->route('students_registration.index')
-                                 ->with('success', "Registration has been {$statusMessage} successfully");
+                    ->with('success', "Registration has been {$statusMessage} successfully");
             }
 
-            // General edit: Form138 is required and allow any file type (max 10MB)
+            // General edit
             $data = $request->validate([
                 'FirstName' => 'required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
@@ -134,31 +166,45 @@ class RegistrationController extends Controller
                 'Gender' => 'required|string|in:Male,Female,Other',
                 'Address' => 'required|string',
                 'ContactNo' => 'required|string|max:15',
-                'Email' => 'required|string|email|max:100|unique:student_registration,Email,' . $id . ',RegistrationID',
+                'Email' => 'required|string|email|max:100|unique:student_registration,Email,'.$id.',RegistrationID',
                 'GradeLevel' => 'required|string|in:Grade 11,Grade 12',
                 'Strand' => 'required|string|in:STEM,ABM,HUMSS',
                 'FatherFullName' => 'required|string|max:100',
                 'MotherFullName' => 'required|string|max:100',
                 'FatherContactNo' => 'required|string|max:15',
                 'MotherContactNo' => 'required|string|max:15',
-                'Form138' => 'required|file|max:10240', // ✅ required on edit, any type allowed
-                'Status' => 'required|string|in:Pending,Approved,Rejected'
+                'Form138' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+                'PSA' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+                'Status' => 'required|string|in:Pending,Approved,Rejected',
             ]);
 
+            // Handle Form138
             if ($request->hasFile('Form138')) {
                 $file = $request->file('Form138');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time().'_'.$file->getClientOriginalName();
                 $filePath = $file->storeAs('form138', $fileName, 'public');
                 $data['Form138'] = $filePath;
+            } else {
+                unset($data['Form138']);
+            }
+
+            // Handle PSA
+            if ($request->hasFile('PSA')) {
+                $file = $request->file('PSA');
+                $fileName = time().'_'.$file->getClientOriginalName();
+                $filePath = $file->storeAs('psa', $fileName, 'public');
+                $data['PSA'] = $filePath;
+            } else {
+                $data['PSA'] = null;
             }
 
             $registration->update($data);
 
             return redirect()->route('students_registration.index')
-                             ->with('success', 'Registration updated successfully');
+                ->with('success', 'Registration updated successfully');
 
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['error' => 'Update failed. ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['error' => 'Update failed. '.$e->getMessage()]);
         }
     }
 
@@ -169,9 +215,47 @@ class RegistrationController extends Controller
             $registration->delete();
 
             return redirect()->route('students_registration.index')
-                             ->with('success', 'Registration deleted successfully');
+                ->with('success', 'Registration deleted successfully');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Delete failed. ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Delete failed. '.$e->getMessage()]);
         }
+    }
+
+   // ✅ Excel export gamit Blade
+    public function exportExcel()
+    {
+        return Excel::download(new RegistrationsExport, 'student_registrations.xlsx');
+    }
+
+    // ✅ PDF export gamit Blade
+    public function exportPDF()
+    {
+        $registrations = StudentRegistration::all();
+        $pdf = Pdf::loadView('students_registration.report_pdf', compact('registrations'));
+        return $pdf->download('student_registrations.pdf');
+    }
+
+    // ✅ Word export gamit PhpWord
+    public function exportDoc()
+    {
+        $registrations = StudentRegistration::all();
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $section->addText("Student Registration Report", ['bold' => true, 'size' => 16]);
+
+        foreach ($registrations as $reg) {
+            $section->addText("ID: {$reg->RegistrationID}");
+            $section->addText("Name: {$reg->FirstName} {$reg->LastName}");
+            $section->addText("Strand: {$reg->Strand}, Grade: {$reg->GradeLevel}");
+            $section->addText("Status: {$reg->current_status}");
+            $section->addTextBreak(1);
+        }
+
+        $fileName = "student_registrations.docx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $phpWord->save($tempFile, 'Word2007');
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 }

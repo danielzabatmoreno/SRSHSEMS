@@ -19,6 +19,7 @@ class SectionSeeder extends Seeder
         $strands = Strand::all();
 
         foreach ($strands as $strand) {
+            // Para sa bawat strand, gagawa ng Grade 11 & 12, Section A & B
             $sections = [
                 [
                     'Section_Name' => $strand->Strand_Name . '-11A',
@@ -47,7 +48,10 @@ class SectionSeeder extends Seeder
             ];
 
             foreach ($sections as $section) {
-                Section::create($section);
+                Section::firstOrCreate([
+                    'Section_Name' => $section['Section_Name'],
+                    'StrandID' => $section['StrandID']
+                ], $section);
             }
         }
     }

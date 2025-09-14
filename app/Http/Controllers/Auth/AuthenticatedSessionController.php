@@ -25,12 +25,23 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        // ✅ Success flash message
-        return redirect()->intended(route('dashboard'))
-                         ->with('status', 'Login successful! Welcome back.');
+        $user = Auth::user();
+
+        // Role-based redirect
+        if ($user->role === 'Student') {
+            return redirect()->route('student.dashboard');
+        } elseif ($user->role === 'Cashier') {
+            return redirect()->route('students_payment.Payment_list');
+        } elseif ($user->role === 'Registrar') {
+            return redirect()->route('students_registration.index');
+        } elseif ($user->role === 'Operator') {
+            return redirect()->route('room.index');
+        }
+
+        // Default kung walang role matched
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -41,7 +52,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

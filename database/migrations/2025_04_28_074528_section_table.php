@@ -14,6 +14,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->foreignId('StrandID')->references('StrandID')->on('strands'); 
             $table->enum('Grade_Level', ['Grade 11', 'Grade 12']); 
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
         });
     }
 

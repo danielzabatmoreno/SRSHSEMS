@@ -21,7 +21,9 @@ return new class extends Migration
             $table->date('DOB');
             $table->enum('Gender', ['Male', 'Female', 'Other']);
             $table->string('Subject_Specialization');
-            // No timestamps
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
         });
     }
 

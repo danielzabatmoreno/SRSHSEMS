@@ -26,6 +26,9 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
+        // currently logging in through email.
+        // For students, we might want to make them log in through LRN, so this code
+        // should have that flexibility or something.
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],

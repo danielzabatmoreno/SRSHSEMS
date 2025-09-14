@@ -17,6 +17,8 @@ return new class extends Migration
             $table->enum('Day', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
             $table->time('Start_Time');
             $table->time('End_Time');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('SubjectID')->references('SubjectID')->on('subjects')->onDelete('cascade');
             $table->foreign('TeacherID')->references('TeacherID')->on('teachers')->onDelete('cascade');

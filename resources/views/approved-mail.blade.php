@@ -29,7 +29,7 @@
         </p>
         <ul style="list-style-type:disc; padding-left:20px; color:#555555; line-height:1.6;">
             <li><strong>Email:</strong> {{ $registration->Email }}</li>
-            <li><strong>Password:</strong> <em>Provided separately</em></li>
+            <li><strong>Password:</strong> <em>{{ $password }}</em></li>
         </ul>
 
         @if(count($missing) > 0)

@@ -10,18 +10,15 @@ class StrandSeeder extends Seeder
     public function run()
     {
         $strands = [
+            // 📌 Academic Cluster
             [
-                'Strand_Name' => 'STEM',
-                'description' => 'Science, Technology, Engineering, and Mathematics'
+                'Strand_Name' => 'ACADEMIC CLUSTERS',
+                'description' => 'STEM, ABM, GAS (Academic Cluster)'
             ],
             [
-                'Strand_Name' => 'ABM',
-                'description' => 'Accountancy, Business, and Management'
+                'Strand_Name' => 'TECHPRO CLUSTERS',
+                'description' => 'TVL, ICT  (Techpro Cluster)'
             ],
-            [
-                'Strand_Name' => 'HUMSS',
-                'description' => 'Humanities and Social Sciences'
-            ]
         ];
 
         foreach ($strands as $strand) {

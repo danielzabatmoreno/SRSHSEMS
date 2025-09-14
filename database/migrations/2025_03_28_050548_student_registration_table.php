@@ -18,9 +18,10 @@ return new class extends Migration {
             $table->text('Address');
             $table->string('ContactNo', 15);
             $table->string('Email', 100)->unique();
-            $table->enum('Strand', ['STEM', 'ABM', 'HUMSS']);
+            $table->enum('Strand', ['TECHPRO CLUSTERS', 'ACADEMIC CLUSTERS']);
             $table->string('GradeLevel'); // Added GradeLevel
             $table->string('Form138')->nullable(); // Optional Form138
+            $table->string('PSA')->nullable();
             $table->string('FatherFullName', 100);
             $table->string('MotherFullName', 100);
             $table->string('FatherContactNo', 15);
@@ -31,6 +32,9 @@ return new class extends Migration {
             $table->timestamp('rejected_date')->nullable();
             $table->enum('current_status', ['Pending', 'Approved', 'Rejected'])
                   ->default('Pending');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
         });
     }
 

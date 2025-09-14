@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('School_Year');
             $table->enum('Grade_Level', ['Grade 11', 'Grade 12']);
             $table->string('description')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('StrandID')->references('StrandID')->on('strands')->onDelete('cascade');
         });

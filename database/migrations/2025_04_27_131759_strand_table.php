@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id('StrandID');
             $table->string('Strand_Name')->unique();
             $table->text('description');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
         });
     }
 

@@ -29,7 +29,9 @@ h4 {
     font-size: 1.275rem;
     color: var(--bs-emphasis-color);
 }
-
+.table tbody tr {
+    height: 60px; /* control fixed row height */
+}
 
 
 /* Layout for admin dashboard skeleton */

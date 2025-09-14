@@ -33,7 +33,7 @@ class StrandController extends Controller
         ]);
 
         Strand::create($validated);
-        return redirect()->route('strand.index')->with('success', 'Strand created successfully');
+        return redirect()->route('strand.index')->with('success', 'Clusters created successfully');
     }
 
     public function edit($id)
@@ -52,7 +52,7 @@ class StrandController extends Controller
         ]);
 
         $strand->update($validated);
-        return redirect()->route('strand.strand_list')->with('success', 'Strand updated successfully');
+        return redirect()->route('strand.strand_list')->with('success', 'Clusters updated successfully');
     }
 
 
@@ -63,7 +63,7 @@ class StrandController extends Controller
             $strand->delete();
             
             return redirect()->route('strand.strand_list')
-                ->with('success', 'Strand deleted successfully');
+                ->with('success', 'Clusters deleted successfully');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Delete failed. ' . $e->getMessage()]);
         }

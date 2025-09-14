@@ -32,18 +32,18 @@
                     </div>
                     <!-- Table Element -->
                     <div class="card border-0">
-                        <div class="card-header">
-                            <nav class="navbar bg-body-light">
-                                <div class="container-fluid">
-                                    <form class="d-flex justify-content-between align-items-center w-100" role="search" method="GET" action="{{ route('teachers.index') }}">
-                                        <div class="d-flex">
-                                        <input class="form-control me-2" type="search" name="search" 
-                                                 placeholder="Search by Subject Name" aria-label="Search" 
-                                                 value="{{ request('search') }}">
-                                        <button class="btn btn-outline-success" type="submit">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
-                                         </button>
-                                        </div>
+                            <div class="card-header py-3"> <!-- increased vertical padding -->
+                                <nav class="navbar bg-body-light">
+                                    <div class="container-fluid">
+                                        <form class="d-flex justify-content-between align-items-center w-100" role="search" method="GET" action="{{ route('teachers.index') }}">
+                                            <div class="d-flex">
+                                                <input class="form-control me-2 py-2" type="search" name="search" 
+                                                    placeholder="Search by Subject Name" aria-label="Search" 
+                                                    value="{{ request('search') }}">
+                                                <button class="btn btn-outline-success py-2" type="submit">
+                                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                                </button>
+                                            </div>
                                             <a href="{{ route('teachers.create') }}" class="btn btn-info">
                                         <i class="fa-solid fa-plus"></i>Add Teacher
                                      </a>

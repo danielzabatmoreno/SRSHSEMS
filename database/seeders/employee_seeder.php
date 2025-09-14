@@ -18,9 +18,9 @@ class employee_seeder extends Seeder
 
         if (!$registrar) {
             User::create([
-                'name' => 'RegistrarUM',
-                'email' => 'RegistrarUM@umindanao.edu.ph',
-                'password' => Hash::make('RegistrarUM'),
+                'name' => 'Registrar',
+                'email' => 'Registrar@santarosa.edu.ph',
+                'password' => Hash::make('Registrar'),
                 'role' => 'Registrar'
             ]);
 

@@ -27,7 +27,6 @@
                     </div>
                     <div class="card border-0 form-card">
                         <div class="card-header">
-                            <h5 class="card-title">Register New Teacher</h5>
                         </div>
                         <div class="card-body">
                             @if($errors->any())

@@ -26,8 +26,7 @@
                         <h4>Subjects Registration</h4>
                     </div>
                     <div class="card border-0 form-card">
-                        <div class="card-header">
-                        </div>
+                        <div class="card-header"></div>
                         <div class="card-body">
                             @if($errors->any())
                                 <div class="alert alert-danger">
@@ -42,10 +41,11 @@
                             <form method="POST" action="{{ route('subjects.store') }}" enctype="multipart/form-data" class="row g-3">
                                 @csrf
                                 
+                                <!-- Cluster -->
                                 <div class="col-md-4">
-                                    <label class="form-label" for="StrandID">Strand</label>
+                                    <label class="form-label" for="StrandID">Clusters</label>
                                     <select class="form-control" name="StrandID" required>
-                                        <option value="">Select a Strand</option>
+                                        <option value="">Select a Cluster</option>
                                         @foreach ($strands as $strand)
                                             <option value="{{ $strand->StrandID }}">
                                                 {{ $strand->Strand_Name }}
@@ -54,21 +54,35 @@
                                     </select>
                                 </div>
 
+                                <!-- Subject -->
                                 <div class="col-md-4">
                                     <label class="form-label">Subject</label>
                                     <input type="text" name="name" class="form-control" required>
                                 </div>
 
+                                <!-- Semester -->
                                 <div class="col-md-4">
                                     <label class="form-label">Semester</label>
-                                    <input type="text" name="Semester" class="form-control" required>
+                                    <select name="Semester" class="form-control" required>
+                                        <option value="">Select Semester</option>
+                                        <option value="1st Semester">1st Semester</option>
+                                        <option value="2nd Semester">2nd Semester</option>
+                                    </select>
                                 </div>
 
+                                <!-- School Year -->
                                 <div class="col-md-4">
                                     <label class="form-label">School Year</label>
-                                    <input type="text" name="School_Year" class="form-control" required>
+                                    <select name="School_Year" class="form-control" required>
+                                        <option value="">Select School Year</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                        <option value="2025-2026">2025-2026</option>
+                                        <option value="2026-2027">2026-2027</option>
+                                        <option value="2027-2028">2027-2028</option>
+                                    </select>
                                 </div>
 
+                                <!-- Grade Level -->
                                 <div class="col-md-4">
                                     <label class="form-label">Grade Level</label>
                                     <select name="Grade_Level" class="form-control" required>
@@ -78,17 +92,24 @@
                                     </select>
                                 </div>
 
+                                <!-- Description -->
                                 <div class="col-md-4">
                                     <label class="form-label">Description</label>
                                     <input type="text" name="description" class="form-control" required>
                                 </div>
 
+                                <!-- Submit Buttons -->
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-outline-success">Submit Registration</button>
-                                    <a href="{{ route('subjects.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-outline-success">
+                                        Submit Registration
+                                    </button>
+                                    <a href="{{ route('subjects.index') }}" class="btn btn-outline-secondary">
+                                        Cancel
+                                    </a>
                                 </div>
                             </form>
 
+                            <!-- Success Modal -->
                             <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -106,6 +127,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- End Modal -->
 
                         </div>
                     </div>
@@ -119,7 +141,6 @@
             
             <!-- Footer -->
             @include('layouts.footer')
-            <!-- Footer -->
         </div>
     </div>
 
@@ -127,7 +148,7 @@
     <script src="{{ asset('js/script.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if success message exists
+            // Show success modal if session has success message
             @if(session('success'))
                 var successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();

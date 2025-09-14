@@ -14,19 +14,19 @@ class OperatorSeeder extends Seeder
      */
     public function run(): void
     {
-        $registrar = User::where('email', 'Operator@umindanao.edu.ph')->first();
+        $registrar = User::where('email', 'admin@santarosa.edu.ph')->first();
 
         if (!$registrar) {
             User::create([
-                'name' => 'OperatorUM',
-                'email' => 'OperatorUM@umindanao.edu.ph',
-                'password' => Hash::make('OperatorUM'),
-                'role' => 'Operator'
+                'name' => 'Admin',
+                'email' => 'admin@santarosa.edu.ph',
+                'password' => Hash::make('Daniel Admin'),
+                'role' => 'Admin'
             ]);
 
-            $this->command->info('Operator created successfully!');
+            $this->command->info('Admin created successfully!');
         } else {
-            $this->command->info('Operator already exists!');
+            $this->command->info('Admin already exists!');
         }
     }
 }

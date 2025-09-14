@@ -17,27 +17,20 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\OldStudentController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentScheduleController;
+use App\Http\Controllers\StudentDashboardController;
+
+
 
 
 Route::get('/', function () {
     return view('welcome'); // uses layouts/guest.blade.php
 })->name('welcome');
 
-Route::middleware(['auth', 'role:Student'])->group(function () {
-    Route::get('/student/dashboard', [DashboardController::class, 'studentDashboard'])
-        ->name('student.dashboard');
-});
-Route::get('/student/dashboard', [StudentController::class, 'studentDashboard'])
+// simple single route (auth middleware)
+Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->name('student.dashboard')
-    ->middleware('auth'); 
-
-
-    Route::middleware(['auth'])->group(function () {
-    Route::get('/student/dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
-    Route::get('/student/subjects', [StudentController::class, 'subjects'])->name('student.subjects');
-    Route::get('/student/schedule', [StudentController::class, 'schedule'])->name('student.schedule');
-});
-
+    ->middleware('auth');
 
 Route::get('send-mail', [MailController::class, 'index']);
 Route::get('send-registration-mail/{id}', [MailController::class, 'sendRegistrationEmail']);
@@ -60,6 +53,9 @@ Route::middleware(['auth'])->prefix('rooms')->group(function () {
 // Public routes (anyone can access to register)
 Route::get('/students_registration/create', [RegistrationController::class, 'create'])->name('students_registration.create');
 Route::post('/students_registration/store', [RegistrationController::class, 'store'])->name('students_registration.store');
+Route::get('/students_registration/export/excel', [RegistrationController::class, 'exportExcel'])->name('students_registration.export.excel');
+Route::get('/students_registration/export/pdf', [RegistrationController::class, 'exportPDF'])->name('students_registration.export.pdf');
+Route::get('/students_registration/export/doc', [RegistrationController::class, 'exportDoc'])->name('students_registration.export.doc');
 
 // Protected routes (registrar/admin only)
 Route::middleware(['auth'])->group(function () {
@@ -114,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/dashboard',[DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/dashboard/pdf', [DashboardController::class, 'downloadPdf'])->name('dashboard.pdf');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

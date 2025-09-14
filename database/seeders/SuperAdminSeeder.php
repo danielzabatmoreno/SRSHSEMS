@@ -18,9 +18,9 @@ class SuperAdminSeeder extends Seeder
 
         if (!$admin) {
             User::create([
-                'name' => 'adminUM',
-                'email' => 'admin@umindanao.edu.ph',
-                'password' => Hash::make('adminUM'),
+                'name' => 'Principal Admin',
+                'email' => 'admin@santarosa.edu.ph',
+                'password' => Hash::make('qwedcxzas'),
                 'role' => 'Admin'
             ]);
 
